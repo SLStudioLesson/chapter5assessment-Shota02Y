@@ -85,11 +85,6 @@ public class TaskDataAccess {
             e.printStackTrace();
         }
     }
-    private String createLine(Task task){
-        //task.getRepUser().getCode():Userオブジェクトからユーザーコードを取得
-        return task.getCode() + "," + task.getName() + "," + task.getStatus() + "," + task.getRepUser().getCode();
-    }
-    
 
     /**
      * コードを基にタスクデータを1件取得します。
@@ -160,6 +155,8 @@ public class TaskDataAccess {
      * @param task フォーマットを作成するタスク
      * @return CSVに書き込むためのフォーマット文字列
      */
-    // private String createLine(Task task) {
-    // }
+    private String createLine(Task task){
+        //task.getRepUser().getCode():Userオブジェクトからユーザーコードを取得
+        return task.getCode() + "," + task.getName() + "," + task.getStatus() + "," + task.getRepUser().getCode();
+    }
 }
