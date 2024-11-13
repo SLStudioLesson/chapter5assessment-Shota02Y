@@ -41,7 +41,6 @@ public class UserDataAccess {
                 String userEmail = values[2];
                 String userPassword = values[3];
                 user = new User(code, name, userEmail, userPassword);
-
             }
         } catch (IOException e) {
             e.printStackTrace();;
@@ -55,24 +54,28 @@ public class UserDataAccess {
      * @return 見つかったユーザー
      */
     public User findByCode(int code) {
+        User user = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
                 int userCode = Integer.parseInt(values[0]);
-                String name = values[1];
-                String email = values[2];
-                String password = values[3];
-                
                 // ユーザーコードが一致する場合、そのユーザーを返す
-                if (userCode == code) {
-                    return new User(userCode, name, email, password);
+                if (code == userCode) {
+                    continue;
                 }
+                String name = values[1];
+                String userEmail = values[2];
+                String userPassword = values[3];
+                
+                // Userオブジェクトにマッピングしていく
+                user = new User(userCode, name, userEmail, userPassword);
+                break;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return user;
     }
 }

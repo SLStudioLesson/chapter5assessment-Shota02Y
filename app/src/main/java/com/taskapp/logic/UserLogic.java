@@ -36,4 +36,9 @@ public class UserLogic {
         System.out.println("ユーザー名：" + user.getName() + "でログインしました。");
         return user;
     }
+
+    public void save(int int1, String name, int int2, User loginUser) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
 }

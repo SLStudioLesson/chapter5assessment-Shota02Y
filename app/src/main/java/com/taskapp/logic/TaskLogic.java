@@ -1,11 +1,13 @@
 package com.taskapp.logic;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.taskapp.dataaccess.LogDataAccess;
 import com.taskapp.dataaccess.TaskDataAccess;
 import com.taskapp.dataaccess.UserDataAccess;
 import com.taskapp.exception.AppException;
+import com.taskapp.model.Log;
 import com.taskapp.model.Task;
 import com.taskapp.model.User;
 
@@ -80,8 +82,21 @@ public class TaskLogic {
      */
     public void save(int code, String name, int repUserCode,
                     User loginUser) throws AppException {
-        // Task task = taskDataAccess.findByCode(code);
+        //Rep_User_Codeの取得
+        User repUser = userDataAccess.findByCode(repUserCode);
+        if (repUser == null){
+            throw new AppException("存在するユーザーコードを入力してください");
+        }
+        //新しくtaskオブジェクトを生成する
+        Task task = new Task(code, name, 0, repUser);
+        //新しくlogオブジェクトを生成する
+        Log log = new Log(code, loginUser.getCode(), 0, LocalDate.now());
+        //task.csvにデータを一件新規登録する
+        taskDataAccess.save(task);
+        //log.csvにデータを一件新規登録する
+        logDataAccess.save(log);
 
+        System.out.println(task.getName() + "の登録が完了しました");
     }
 
     /**
@@ -95,9 +110,30 @@ public class TaskLogic {
      * @param loginUser ログインユーザー
      * @throws AppException タスクコードが存在しない、またはステータスが前のステータスより1つ先でない場合にスローされます
      */
-    // public void changeStatus(int code, int status,
-    //                         User loginUser) throws AppException {
-    // }
+    public void changeStatus(int code, int statusInt,
+                            User loginUser) throws AppException {
+        Task task = taskDataAccess.findByCode(code);
+        //task.csvに存在しない時
+        if(task == null ){
+            throw new AppException("存在するタスクコードを入力してください");
+        }
+        //tasks.csvに存在するタスクのステータスが、変更後のステータスの1つ前じゃない場合
+        if(task.getStatus() + 1 != statusInt){
+            throw new AppException("ステータスは、前のステータスより1つ先のもののみを選択してください");
+        }
+
+        //新しくタスクデータをセットする
+        task.setStatus(statusInt);
+        //tasks.csvのデータを更新する
+        taskDataAccess.update(task);
+
+        //新しくLogオブジェクトを生成する
+        Log log = new Log(code, loginUser.getCode(), statusInt, LocalDate.now());
+        //log.csvにデータを一件新規登録する
+        logDataAccess.save(log);
+
+        System.out.println( "ステータスの変更が完了しました。");
+    }
 
     /**
      * タスクを削除します。
