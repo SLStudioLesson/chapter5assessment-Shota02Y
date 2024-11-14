@@ -98,12 +98,14 @@ public class TaskDataAccess {
             reader.readLine();
             while((line = reader.readLine())!= null){
                 String[] values = line.split(",");
+                
                 int taskCode = Integer.parseInt(values[0]);
-                if(code != taskCode)continue;
+                if(code != taskCode)
+                continue;
                 String name = values[1];
                 int statusCode = Integer.parseInt(values[2]);
-                int repUserCode = Integer.parseInt(values[3]);
 
+                int repUserCode = Integer.parseInt(values[3]);
                 User repUser = userDataAccess.findByCode(repUserCode);
 
                 task = new Task(taskCode, name, statusCode, repUser);

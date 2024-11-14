@@ -62,7 +62,7 @@ public class UserDataAccess {
                 String[] values = line.split(",");
                 int userCode = Integer.parseInt(values[0]);
                 // ユーザーコードが一致する場合、そのユーザーを返す
-                if (code == userCode) {
+                if (code != userCode) {
                     continue;
                 }
                 String name = values[1];
